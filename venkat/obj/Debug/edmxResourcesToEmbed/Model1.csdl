@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DafestyModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Movy">
+    <Key>
+      <PropertyRef Name="VideoCode" />
+    </Key>
+    <Property Name="VideoCode" Type="Int16" Nullable="false" />
+    <Property Name="MovieTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MovieType" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="Rating" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
+    <Property Name="RentalPrice" Type="Single" />
+    <Property Name="ProducerID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Director" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Media" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="TotalStock" Type="Int16" />
+    <Property Name="NumberRented" Type="Int16" />
+    <NavigationProperty Name="Producer" Relationship="DafestyModel.FK_Movies_Producers" FromRole="Movy" ToRole="Producer" />
+  </EntityType>
+  <EntityContainer Name="DafestyEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Movies" EntityType="Self.Movy" />
+    <EntitySet Name="Producers" EntityType="DafestyModel.Producer" />
+    <AssociationSet Name="FK_Movies_Producers" Association="DafestyModel.FK_Movies_Producers">
+      <End Role="Producer" EntitySet="Producers" />
+      <End Role="Movy" EntitySet="Movies" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Producer">
+    <Key>
+      <PropertyRef Name="ProducerID" />
+    </Key>
+    <Property Name="ProducerID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ProducerName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CountryCode" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Movies" Relationship="DafestyModel.FK_Movies_Producers" FromRole="Producer" ToRole="Movy" />
+  </EntityType>
+  <Association Name="FK_Movies_Producers">
+    <End Type="DafestyModel.Producer" Role="Producer" Multiplicity="0..1" />
+    <End Type="DafestyModel.Movy" Role="Movy" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Producer">
+        <PropertyRef Name="ProducerID" />
+      </Principal>
+      <Dependent Role="Movy">
+        <PropertyRef Name="ProducerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
